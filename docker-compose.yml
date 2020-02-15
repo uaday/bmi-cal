@@ -1,0 +1,27 @@
+# version: "3.7"
+
+# services:
+#   sample:
+#     container_name: sample
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     volumes:
+#       - ".:/app"
+#       - "/app/node_modules"
+#     ports:
+#       - "3000:3000"
+#     environment:
+#       - NODE_ENV=development
+
+version: "3.7"
+
+services:
+  sample-prod:
+    image: ${DOCKER_REGISTRY}/aks-web:${VERSION:-dev}
+    container_name: sample-prod
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
