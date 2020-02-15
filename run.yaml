@@ -76,7 +76,7 @@ spec:
     tls:
     - hosts:
       - xerrot.eastus.cloudapp.azure.com
-    secretName: xerrot-eastus-cloudapp-azure-com-staging
+      secretName: xerrot-eastus-cloudapp-azure-com-staging
   rules:
     - host: xerrot.eastus.cloudapp.azure.com
       http:
