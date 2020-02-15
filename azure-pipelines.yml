@@ -14,7 +14,7 @@ steps:
   - script: sudo service docker status
     displayName: "docker status"
 
-  - script: docker-compose -f docker-compose.yml  --project-directory ./AKS build
+  - script: docker-compose -f docker-compose.yml  --project-directory ./ build
     displayName: "docker-compose build"
 
   - script: |
