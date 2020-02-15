@@ -73,9 +73,9 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-staging
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
-    tls:
+  tls:
     - hosts:
-  - xerrot.eastus.cloudapp.azure.com
+        - xerrot.eastus.cloudapp.azure.com
       secretName: xerrot-eastus-cloudapp-azure-com-staging
   rules:
     - host: xerrot.eastus.cloudapp.azure.com
