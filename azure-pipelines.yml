@@ -1,19 +1,34 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
-trigger:
-- master
+# Docker image
+# Build a Docker image to deploy, run, or push to a container registry.
+# Add steps that use Docker Compose, tag images, push to a registry, run an image, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: "ubuntu-latest"
+
+variables:
+  VERSION: "$(build.buildNumber)"
+  DOCKER_REGISTRY: $(dockerId).azurecr.io
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - script: sudo service docker status
+    displayName: "docker status"
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - script: docker-compose -f ./AKS/docker-compose.yml  --project-directory ./AKS build
+    displayName: "docker-compose build"
+
+  - script: |
+      echo "$(dockerPassword)" | docker login  $(dockerId).azurecr.io -u $(dockerUsername) --password-stdin
+      docker push $(dockerId).azurecr.io/aks-web:$(VERSION)
+    displayName: "docker publish"
+
+  - task: CopyFiles@2
+    inputs:
+      sourceFolder: $(Build.SourcesDirectory)
+      contents: "**/run.yaml"
+      targetFolder: $(Build.ArtifactStagingDirectory)/Kube/
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      artifactsName: "drop"
